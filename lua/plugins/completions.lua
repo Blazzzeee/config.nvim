@@ -2,6 +2,7 @@ return {
     {
         "hrsh7th/nvim-cmp",
         dependencies = {
+            "hrsh7th/cmp-nvim-lua",
             "hrsh7th/cmp-nvim-lsp",
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-path",
@@ -63,14 +64,17 @@ return {
                         menu = {
                             buffer = "[buf]",
                             nvim_lsp = "[LSP]",
+                            nvim_lua = "[api]",
                             path = "[path]",
                             luasnip = "[snip]"
                         }
                     }
                 },
                 sources = cmp.config.sources({
-                    { name = "nvim_lsp", max_item_count = 5 },
-                    { name = "luasnip",  max_item_count = 5 },
+                    { name = "gh_issues", },
+                    { name = "nvim_lua",  max_item_count = 5 },
+                    { name = "nvim_lsp",  max_item_count = 5 },
+                    { name = "luasnip", },
                 }, {
                     { name = "buffer", keyword_length = 5, max_item_count = 5 },
                     { name = "path",   max_item_count = 5 },

@@ -70,3 +70,26 @@ vim.api.nvim_set_hl(0, 'CmpItemKindMethod', { link = 'CmpItemKindFunction' })
 vim.api.nvim_set_hl(0, 'CmpItemKindKeyword', { bg = 'NONE', fg = '#D4D4D4' })
 vim.api.nvim_set_hl(0, 'CmpItemKindProperty', { link = 'CmpItemKindKeyword' })
 vim.api.nvim_set_hl(0, 'CmpItemKindUnit', { link = 'CmpItemKindKeyword' })
+
+function FloatingTerm()
+    local buf = vim.api.nvim_create_buf(false, true) -- Create a scratch buffer (not listed)
+    local width = math.floor(vim.o.columns * 0.8)
+    local height = math.floor(vim.o.lines * 0.8)
+    local opts = {
+        style = "minimal",
+        relative = "editor",
+        width = width,
+        height = height,
+        row = math.floor((vim.o.lines - height) / 2),
+        col = math.floor((vim.o.columns - width) / 2),
+        border = "rounded"
+    }
+
+    local win = vim.api.nvim_open_win(buf, true, opts)                                                     -- Open window
+    vim.fn.termopen(vim.o.shell)                                                                           -- Start terminal in the buffer
+    vim.api.nvim_buf_set_keymap(buf, "t", "<Esc>", "<C-\\><C-n>:q<CR>", { noremap = true, silent = true }) -- Close terminal with Esc
+end
+
+-- Create a command and keybinding
+vim.api.nvim_create_user_command("FTerm", FloatingTerm, {})
+vim.keymap.set("n", "<leader>ft", ":FTerm<CR>", { noremap = true, silent = true })
