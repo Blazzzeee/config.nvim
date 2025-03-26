@@ -6,7 +6,6 @@ return {
             "hrsh7th/cmp-nvim-lsp",
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-path",
-            "hrsh7th/cmp-cmdline",
             "L3MON4D3/LuaSnip",
             "saadparwaiz1/cmp_luasnip",
             "onsails/lspkind.nvim",
@@ -79,24 +78,6 @@ return {
                     { name = "buffer", keyword_length = 5, max_item_count = 5 },
                     { name = "path",   max_item_count = 5 },
                 }),
-            })
-
-            -- Use buffer source for '/' and '?' in command-line mode.
-            cmp.setup.cmdline({ '/', '?' }, {
-                mapping = cmp.mapping.preset.cmdline(),
-                sources = {
-                    { name = "buffer" },
-                },
-            })
-            -- Use cmdline & path source for ':' in command-line mode.
-            cmp.setup.cmdline(":", {
-                mapping = cmp.mapping.preset.cmdline(),
-                sources = cmp.config.sources({
-                    { name = "path" },
-                }, {
-                    { name = "cmdline" },
-                }),
-                matching = { disallow_symbol_nonprefix_matching = false },
             })
         end,
     },

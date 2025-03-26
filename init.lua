@@ -20,8 +20,6 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     desc = "Auto format buffer on save",
 })
 
--- Set a semi-transparent effect for visual mode (using lighter background)
-vim.api.nvim_set_hl(0, "Visual", { bg = "#cccccc", fg = "#000000" })
 
 --Set cursor style to block in insert mode
 
@@ -52,8 +50,14 @@ vim.o.tabstop = 4 -- Ensure it matches shiftwidth if you want consistency
 
 -- Keep auto-indents aligned with shiftwidth
 vim.o.smartindent = true
-
+vim.opt.termguicolors = true
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undofile = true
 --highlights for completions
+vim.api.nvim_set_hl(0, "PmenuSel", { bg = "#282C34", fg = "NONE" })
+vim.api.nvim_set_hl(0, "Pmenu", { fg = "#C5CDD9", bg = "#22252A" })
 -- gray
 vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated', { bg = 'NONE', strikethrough = true, fg = '#808080' })
 -- blue

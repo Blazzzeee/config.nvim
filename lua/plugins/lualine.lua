@@ -30,7 +30,7 @@ return {
             local colors = {
                 darkgray = "#16161d",
                 gray = "#727169",
-                innerbg = nil,
+                innerbg = '#1a1b26',
                 outerbg = "#16161D",
                 normal = "#7e9cd8",
                 insert = "#98bb6c",
