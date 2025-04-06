@@ -5,6 +5,13 @@ return {
         "williamboman/mason.nvim",
         config = function()
             require("mason").setup()
+            opts = {
+                ensure_installed = {
+                    "clangd",
+                    "clangformat",
+                    "codelldb",
+                },
+            }
         end,
     },
     -- Mason LSPconfig
@@ -23,9 +30,20 @@ return {
         dependencies = { "williamboman/mason-lspconfig.nvim" },
         config = function()
             local lspconfig = require("lspconfig")
-            local servers = { "pyright", "lua_ls", "ts_ls", "clangd", }
+            local servers = { "pyright", "lua_ls", "ts_ls", "clangd" }
             lspconfig.emmet_language_server.setup({
-                filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "pug", "typescriptreact" },
+                filetypes = {
+                    "css",
+                    "eruby",
+                    "html",
+                    "javascript",
+                    "javascriptreact",
+                    "less",
+                    "sass",
+                    "scss",
+                    "pug",
+                    "typescriptreact",
+                },
                 -- Read more about this options in the [vscode docs](https://code.visualstudio.com/docs/editor/emmet#_emmet-configuration).
                 -- **Note:** only the options listed in the table are supported.
                 init_options = {
@@ -50,19 +68,19 @@ return {
                 },
             })
             local on_attach = function(_, _)
-                vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, {})
-                vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, {})
-                vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {})
-                vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, {})
-                vim.keymap.set('n', 'gr', require('telescope.builtin').lsp_references, {})
-                vim.keymap.set('n', 'gk', vim.lsp.buf.hover, {})
+                vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, {})
+                vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {})
+                vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
+                vim.keymap.set("n", "gi", vim.lsp.buf.implementation, {})
+                vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, {})
+                vim.keymap.set("n", "gk", vim.lsp.buf.hover, {})
             end
 
-            local capabilities = require('cmp_nvim_lsp').default_capabilities()
+            local capabilities = require("cmp_nvim_lsp").default_capabilities()
             for _, server in ipairs(servers) do
                 lspconfig[server].setup({
                     on_attach = on_attach,
-                    capabilities = capabilities
+                    capabilities = capabilities,
                 })
             end
         end,

@@ -28,10 +28,10 @@ return {
         local M = {}
         M.theme = function()
             local colors = {
-                darkgray = "#16161d",
-                gray = "#727169",
-                innerbg = '#1a1b26',
-                outerbg = "#16161D",
+                darkgray = "#2c2e3e",
+                gray = "#a0a0b0",
+                innerbg = "none",
+                outerbg = "none",
                 normal = "#7e9cd8",
                 insert = "#98bb6c",
                 visual = "#ffa066",
@@ -73,28 +73,56 @@ return {
         end
 
         local custom_material = M
-        require("lualine").setup {
+        require("lualine").setup({
             options = {
                 theme = custom_material.theme(),
-                component_separators = { left = '', right = '' },
-                section_separators = { left = '', right = '' },
+                component_separators = { left = "", right = "" },
+                section_separators = { left = "", right = "" },
                 disabled_filetypes = {},
                 globalstatus = false,
             },
             sections = {
                 lualine_a = { "mode" },
                 lualine_b = { "branch" },
-                lualine_c = {},
-                lualine_x = { "filetype" },
-                lualine_y = { "filename" },
+                lualine_c = {
+                    {
+                        "diagnostics",
+
+                        -- Table of diagnostic sources, available sources are:
+                        --   'nvim_lsp', 'nvim_diagnostic', 'nvim_workspace_diagnostic', 'coc', 'ale', 'vim_lsp'.
+                        -- or a function that returns a table as such:
+                        --   { error=error_cnt, warn=warn_cnt, info=info_cnt, hint=hint_cnt }
+                        sources = { "nvim_diagnostic" },
+
+                        -- Displays diagnostics for the defined severity types
+                        sections = { "error", "warn", "info", "hint" },
+
+                        diagnostics_color = {
+                            -- Same values as the general color option can be used here.
+                            error = "DiagnosticError", -- Changes diagnostics' error color.
+                            warn = "DiagnosticWarn", -- Changes diagnostics' warn color.
+                            info = "DiagnosticInfo", -- Changes diagnostics' info color.
+                            hint = "DiagnosticHint", -- Changes diagnostics' hint color.
+                        },
+
+                        symbols = {
+                            error = " ",
+                            warn = " ",
+                            info = " ",
+                            hint = " ",
+                        },
+                        colored = true, -- Displays diagnostics status in color if set to true.
+                        update_in_insert = false, -- Update diagnostics in insert mode.
+                        always_visible = false,
+                    },
+                },
+                lualine_x = {},
+                lualine_y = { "filetype", "filename" },
                 lualine_z = { lsp_client },
             },
-            inactive_sections = {
-            },
+            inactive_sections = {},
             tabline = {},
             extensions = { "fugitive", "oil", "mason", "lazy" },
-
-
-        }
+        })
     end,
 }
