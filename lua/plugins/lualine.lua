@@ -5,7 +5,7 @@ return {
         local function lsp_client()
             local msg = "No Active LSP"
             local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
-            local clients = vim.lsp.get_active_clients()
+            local clients = vim.lsp.get_clients()
             if not clients or vim.tbl_isempty(clients) then
                 return msg
             end

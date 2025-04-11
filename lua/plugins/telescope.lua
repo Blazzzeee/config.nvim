@@ -16,7 +16,7 @@ return {
             vim.keymap.set("n", "<leader>ph", builtin.help_tags, { desc = "Telescope help tags" })
             vim.keymap.set("n", "<leader>tm", builtin.man_pages, { desc = "Telescope browse man pages" })
             vim.keymap.set("n", "<leader>tc", builtin.colorscheme, { desc = "Telescope change colorscheme " })
-            vim.keymap.set("n", "<leader>tkb", builtin.keymaps, { desc = " Telescope diagnostics" })
+            vim.keymap.set("n", "<leader>tkb", builtin.keymaps, { desc = " Telescope show keymaps" })
             require("telescope").setup({
                 extensions = {
                     ["ui-select"] = {

@@ -4,6 +4,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 require("config.lazy")
 require("keymap")
+require("floaterm")
 vim.opt.clipboard = "unnamedplus"
 
 -- Navigate to previous dir
@@ -78,29 +79,22 @@ function Highlightscmp()
     vim.api.nvim_set_hl(0, "CmpItemKindUnit", { link = "CmpItemKindKeyword" })
 end
 
-function FloatingTerm()
-    local buf = vim.api.nvim_create_buf(false, true) -- Create a scratch buffer (not listed)
-    local width = math.floor(vim.o.columns * 0.8)
-    local height = math.floor(vim.o.lines * 0.8)
-    local opts = {
-        style = "minimal",
-        relative = "editor",
-        width = width,
-        height = height,
-        row = math.floor((vim.o.lines - height) / 2),
-        col = math.floor((vim.o.columns - width) / 2),
-        border = "rounded",
-    }
-
-    local win = vim.api.nvim_open_win(buf, true, opts)                                                  -- Open window
-    vim.fn.termopen(vim.o.shell)                                                                        -- Start terminal in the buffer
-    vim.api.nvim_buf_set_keymap(buf, "t", "<Esc>", "<C-\\><C-n>:q<CR>", { noremap = true, silent = true }) -- Close terminal with Esc
-end
-
--- Create a command and keybinding
-vim.api.nvim_create_user_command("FTerm", FloatingTerm, {})
-vim.keymap.set("n", "<leader>ft", ":FTerm<CR>", { noremap = true, silent = true })
-
 --Breakpoints color
 vim.fn.sign_define("DapBreakpoint", { text = "B", texthl = "DapBreakpoint", linehl = "", numhl = "" })
 vim.api.nvim_set_hl(0, "DapBreakpoint", { fg = "#ffffff", bg = "none" })
+
+--LSP previews
+
+vim.diagnostic.config({
+    virtual_text = true,
+    signs = true,
+    underline = true,
+    update_in_insert = false,
+    severity_sort = true,
+    float = {
+        show_header = true,
+        source = "always",
+        border = "rounded",
+        focusable = false,
+    },
+})
