@@ -1,127 +1,8 @@
 return {
     {
-        "EdenEast/nightfox.nvim",
-        config = function()
-            require("nightfox").setup({
-                options = {
-                    compile_path = vim.fn.stdpath("cache") .. "/nightfox",
-                    compile_file_suffix = "_compiled", -- Compiled file suffix
-                    transparent = true, -- Disable setting background
-                    terminal_colors = true, -- Set terminal colors (vim.g.terminal_color_*) used in `:terminal`
-                    dim_inactive = false, -- Non focused panes set to alternative background
-                    module_default = true, -- Default enable value for modules
-                    styles = {          -- Style to be applied to different syntax groups
-                        comments = "NONE", -- Value is any valid attr-list value `:help attr-list`
-                        conditionals = "NONE",
-                        constants = "NONE",
-                        functions = "NONE",
-                        keywords = "NONE",
-                        numbers = "NONE",
-                        operators = "NONE",
-                        strings = "NONE",
-                        types = "NONE",
-                        variables = "NONE",
-                    },
-                    inverse = { -- Inverse highlight for different types
-                        match_paren = false,
-                        visual = false,
-                        search = false,
-                    },
-                    modules = { -- List of various plugins and additional options
-                        -- ...
-                    },
-                },
-                palettes = {},
-                specs = {},
-                groups = {},
-            })
-
-            -- Set the colorscheme
-            --vim.cmd("colorscheme nightfox")
-        end,
-    },
-    {
-        "rose-pine/neovim",
-        name = "rose-pine",
-        config = function()
-            require("rose-pine").setup({
-                variant = "main", -- auto, main, moon, or dawn
-                dark_variant = "moon", -- main, moon, or dawn
-                dim_inactive_windows = false,
-                extend_background_behind_borders = true,
-
-                enable = {
-                    terminal = true,
-                    legacy_highlights = true, -- Improve compatibility for previous versions of Neovim
-                    migrations = true, -- Handle deprecated options automatically
-                },
-
-                styles = {
-                    bold = true,
-                    italic = true,
-                    transparency = true,
-                },
-
-                groups = {
-                    border = "muted",
-                    link = "iris",
-                    panel = "surface",
-
-                    error = "love",
-                    hint = "iris",
-                    info = "foam",
-                    note = "pine",
-                    todo = "rose",
-                    warn = "gold",
-
-                    git_add = "foam",
-                    git_change = "rose",
-                    git_delete = "love",
-                    git_dirty = "rose",
-                    git_ignore = "muted",
-                    git_merge = "iris",
-                    git_rename = "pine",
-                    git_stage = "iris",
-                    git_text = "rose",
-                    git_untracked = "subtle",
-
-                    h1 = "iris",
-                    h2 = "foam",
-                    h3 = "rose",
-                    h4 = "gold",
-                    h5 = "pine",
-                    h6 = "foam",
-                },
-
-                highlight_groups = {
-                    -- Comment = { fg = "foam" },
-                    -- StatusLine = { fg = "love", bg = "love", blend = 15 },
-                    -- VertSplit = { fg = "muted", bg = "muted" },
-                    -- Visual = { fg = "base", bg = "text", inherit = false },
-                },
-
-                before_highlight = function(group, highlight, palette)
-                    -- Disable all undercurls
-                    -- if highlight.undercurl then
-                    --     highlight.undercurl = false
-                    -- end
-                    --
-                    -- Change palette colour
-                    -- if highlight.fg == palette.pine then
-                    --     highlight.fg = palette.foam
-                    -- end
-                end,
-            })
-
-            -- vim.cmd("colorscheme rose-pine")
-            --vim.cmd("colorscheme rose-pine-main")
-            -- vim.cmd("colorscheme rose-pine-moon")
-            -- vim.cmd("colorscheme rose-pine-dawn")
-        end,
-    },
-    {
         "catppuccin/nvim",
         name = "catppuccin",
+        lazy = true,
         config = function()
             require("catppuccin").setup({
                 flavour = "mocha", -- latte, frappe, macchiato, mocha
@@ -157,6 +38,12 @@ return {
                 },
                 color_overrides = {},
                 custom_highlights = {},
+                function(colors)
+                    return {
+                        LineNr = { fg = colors.text },
+                        CursorLineNr = { fg = colors.text },
+                    }
+                end,
                 default_integrations = true,
                 integrations = {
                     cmp = true,
@@ -173,7 +60,49 @@ return {
             })
 
             -- setup must be called before loading
-            vim.cmd.colorscheme("catppuccin")
         end,
+    },
+
+    {
+        "f4z3r/gruvbox-material.nvim",
+        name = "gruvbox-material",
+        lazy = true,
+        priority = 1000,
+        opts = {},
+        config = function()
+            -- values shown are defaults and will be used if not provided
+            require("gruvbox-material").setup({
+                italics = true, -- enable italics in general
+                contrast = "medium", -- set contrast, can be any of "hard", "medium", "soft"
+                comments = {
+                    italics = true, -- enable italic comments
+                },
+                background = {
+                    transparent = true, -- set the background to transparent
+                },
+                float = {
+                    force_background = false, -- force background on floats even when background.transparent is set
+                    background_color = nil, -- set color for float backgrounds. If nil, uses the default color set
+                    -- by the color scheme
+                },
+                signs = {
+                    highlight = true, -- whether to highlight signs
+                },
+                customize = nil, -- customize the theme in any way you desire, see below what this
+                -- configuration accepts
+            })
+        end,
+    },
+    {
+        "gbprod/nord.nvim",
+        lazy = true,
+        priority = 1000,
+        config = function()
+            require("nord").setup({})
+            vim.cmd.colorscheme("nord")
+        end,
+    },
+    install = {
+        colorscheme = { "nord" },
     },
 }

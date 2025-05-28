@@ -3,7 +3,8 @@ return {
     -- Mason
     {
         "williamboman/mason.nvim",
-        config = function()
+          cmd = "Mason",               -- load on :Mason
+         event = "BufReadPre",          config = function()
             require("mason").setup()
             opts = {
                 ensure_installed = {
@@ -17,6 +18,7 @@ return {
     -- Mason LSPconfig
     {
         "williamboman/mason-lspconfig.nvim",
+        event = { "BufReadPre", "BufNewFile" },
         dependencies = { "williamboman/mason.nvim" },
         config = function()
             require("mason-lspconfig").setup({
@@ -27,6 +29,7 @@ return {
     -- LSPconfig
     {
         "neovim/nvim-lspconfig",
+        event = { "BufReadPre", "BufNewFile" },
         dependencies = { "williamboman/mason-lspconfig.nvim" },
         config = function()
             local lspconfig = require("lspconfig")
@@ -68,12 +71,16 @@ return {
                 },
             })
             local on_attach = function(_, _)
-                vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, {})
-                vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {})
-                vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
-                vim.keymap.set("n", "gi", vim.lsp.buf.implementation, {})
-                vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, {})
-                vim.keymap.set("n", "gk", vim.lsp.buf.hover, {})
+                vim.keymap.set("n", "<leader>n", vim.lsp.buf.rename, {desc = "Rename symbol"})
+                vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {desc = "Code actions"})
+                vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Goto defination"})
+                vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Goto implementation"})
+                vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, { desc = "Goto reference "})
+                vim.keymap.set("n", "gk", vim.lsp.buf.hover, {desc = "Symbol definition (LSP)"})
+
+                vim.keymap.set("n", "<leader>q", function()
+                    vim.diagnostic.setqflist()
+                end, { desc = "Add diagnostics to quickfix list" })
             end
 
             local capabilities = require("cmp_nvim_lsp").default_capabilities()

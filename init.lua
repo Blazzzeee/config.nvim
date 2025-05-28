@@ -3,6 +3,7 @@ vim.opt.relativenumber = true
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 require("config.lazy")
+vim.cmd(":colorscheme nord")
 require("keymap")
 require("floaterm")
 vim.opt.clipboard = "unnamedplus"
@@ -11,17 +12,6 @@ vim.opt.clipboard = "unnamedplus"
 vim.keymap.set("n", "<space>pv", function()
     vim.cmd.Ex()
 end)
-
--- Auto-format on save
-local augroup = vim.api.nvim_create_augroup("AutoFormat", { clear = true })
-
-vim.api.nvim_create_autocmd("BufWritePre", {
-    group = augroup,
-    callback = function()
-        vim.lsp.buf.format({ async = false }) -- Synchronous formatting before save
-    end,
-    desc = "Auto format buffer on save",
-})
 
 --Set cursor style to block in insert mode
 
@@ -43,21 +33,14 @@ vim.opt.shortmess:append("c")
 
 -- Use spaces instead of tabs
 vim.o.expandtab = true
-
--- Set the width of each indentation level
-vim.o.shiftwidth = 4 -- Change 4 to whatever width you prefer
-
--- Set the width of a tab character
-vim.o.tabstop = 4 -- Ensure it matches shiftwidth if you want consistency
-
--- Keep auto-indents aligned with shiftwidth
+vim.o.shiftwidth = 4
+vim.o.tabstop = 4 
 vim.o.smartindent = true
 vim.opt.termguicolors = true
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
---highlights for completions
 function Highlightscmp()
     vim.api.nvim_set_hl(0, "PmenuSel", { bg = "#282C34", fg = "NONE" })
     vim.api.nvim_set_hl(0, "Pmenu", { fg = "#C5CDD9", bg = "#22252A" })
@@ -98,3 +81,8 @@ vim.diagnostic.config({
         focusable = false,
     },
 })
+
+--White Line numbers
+vim.cmd([[highlight LineNr guifg=#CDD6F4]])
+vim.cmd([[highlight CursorLineNr guifg=#CDD6F4]])
+

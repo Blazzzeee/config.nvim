@@ -2,6 +2,7 @@ return {
     {
         --Luasnip for expanding snippets
         "L3MON4D3/LuaSnip",
+        event = "InsertEnter",
         dependencies = {
             "rafamadriz/friendly-snippets",
             "saadparwaiz1/cmp_luasnip",
@@ -30,6 +31,7 @@ return {
 
     {
         "hrsh7th/nvim-cmp",
+        event = { "InsertEnter", "CmdlineEnter" },
         dependencies = {
             "hrsh7th/cmp-nvim-lua",
             "hrsh7th/cmp-nvim-lsp",
@@ -97,18 +99,19 @@ return {
                     }),
                 },
                 sources = cmp.config.sources({
-                    { name = "nvim_lua", max_item_count = 5 },
+                    { name = "nvim_lua", max_item_count = 2 },
                     { name = "luasnip" },
-                    { name = "buffer",   keyword_length = 4, max_item_count = 5 },
-                    { name = "nvim_lsp", max_item_count = 5 },
+                    { name = "nvim_lsp", max_item_count = 2 },
+                    { name = "buffer",   keyword_length = 4, max_item_count = 2 },
                 }, {
-                    { name = "path", max_item_count = 5 },
+                    { name = "path", max_item_count = 3},
                 }),
             })
         end,
     },
     {
         "hrsh7th/cmp-cmdline",
+        event = { "InsertEnter", "CmdlineEnter" },
         dependencies = {
             "hrsh7th/nvim-cmp",
         },

@@ -3,19 +3,20 @@ return {
         "nvim-telescope/telescope.nvim",
         dependencies = {
             "nvim-lua/plenary.nvim",
-            "nvim-telescope/telescope-ui-select.nvim", -- Ensure this is installed as a dependency
+            "nvim-telescope/telescope-ui-select.nvim", 
         },
         config = function()
             -- Keymaps for Telescope
             local builtin = require("telescope.builtin")
 
-            vim.keymap.set("n", "<leader>pf", builtin.find_files, { desc = "Telescope find files" })
-            vim.keymap.set("n", "<leader>pg", builtin.git_files, { desc = "Telescope find git files" })
-            vim.keymap.set("n", "<leader>pd", builtin.diagnostics, { desc = " Telescope diagnostics" })
-            vim.keymap.set("n", "<leader>ps", builtin.live_grep, { desc = "Telescope live grep" })
-            vim.keymap.set("n", "<leader>ph", builtin.help_tags, { desc = "Telescope help tags" })
+            vim.keymap.set("n", "<leader>f", builtin.find_files, { desc = "search file" })
+            vim.keymap.set("n", "<leader>e", builtin.git_files, { desc = "search files (git)" })
+            vim.keymap.set("n", "<leader>/", builtin.live_grep, { desc = "live grep" })
+            vim.keymap.set("n", "<leader>h", builtin.help_tags, { desc = "help neovim" })
+            vim.keymap.set("n", "<leader>s", builtin.lsp_document_symbols, { desc = "symbol picker (file)" })
+            vim.keymap.set("n", "<leader>S", builtin.lsp_dynamic_workspace_symbols, { desc = "symbol picker (global)" })
             vim.keymap.set("n", "<leader>tm", builtin.man_pages, { desc = "Telescope browse man pages" })
-            vim.keymap.set("n", "<leader>tc", builtin.colorscheme, { desc = "Telescope change colorscheme " })
+            vim.keymap.set("n", "<leader>co", builtin.colorscheme, { desc = "Telescope change colorscheme " })
             vim.keymap.set("n", "<leader>tkb", builtin.keymaps, { desc = " Telescope show keymaps" })
             require("telescope").setup({
                 extensions = {
@@ -37,7 +38,7 @@ return {
                 },
             })
 
-            require("telescope").load_extension("ui-select")
+--            require("telescope").load_extension("ui-select")
         end,
     },
 }

@@ -50,4 +50,4 @@ local function toggle_term()
     end
 end
 
-vim.keymap.set({ "n", "t" }, "<leader>ft", toggle_term)
+vim.keymap.set({ "n", "t" }, "<leader>t", toggle_term, {desc="Toggle terminal"})
