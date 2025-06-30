@@ -51,65 +51,7 @@ wk.add({
 		noremap = true,
 		mode = "n",
 	},
-	{
-		"ge",
-		"G",
-		desc = "Goto file end",
-		noremap = true,
-		mode = "n",
-	},
-	{
-		"gg",
-		"gg",
-		desc = "Goto file start",
-		noremap = true,
-		mode = "n",
-	},
-	{
-		"gh",
-		"^",
-		desc = "Goto line start",
-		noremap = true,
-		mode = "n",
-	},
-	{
-		"gl",
-		"$",
-		desc = "Goto line end",
-		noremap = true,
-		mode = "n",
-	},
-	{
-		"gw",
-		"w",
-		desc = "Next word",
-		noremap = true,
-		mode = "n",
-	},
-	{
-		"gx",
-		"<nop>",
-		desc = "",
-		noremap = true,
-		mode = "n",
-	},
-	{
-		"g`",
-		"<nop>",
-		desc = "",
-		noremap = true,
-		mode = "n",
-	},
-	{
-		"gO",
-		"<nop>",
-		desc = "",
-		noremap = true,
-		mode = "n",
-	},
 })
-local wk = require("which-key")
-
 wk.add({
   {
     "<leader>wa",
@@ -137,4 +79,12 @@ wk.add({
   },
 })
 
-vim.keymap.set("n", "<leader>F", "<cmd>Neotree toggle<CR>", { desc = "Open file tree" })
+vim.keymap.set("n", "<leader>q", "<cmd>Neotree toggle<CR>", { desc = "Open file tree" })
+
+vim.keymap.set({"n", "v", "o"}, "gh", "^", { desc = "Goto line start", noremap = true })
+vim.keymap.set({"n", "v", "o"}, "gl", "$", { desc = "Goto line end", noremap = true })
+vim.keymap.set({"n", "v", "o"}, "gg", "gg", { desc = "Goto file start", noremap = true })
+vim.keymap.set({"n", "v", "o"}, "ge", "G", { desc = "Goto file end", noremap = true })
+vim.keymap.set({"n", "v", "o"}, "gw", "w", { desc = "Next word", noremap = true })
+vim.keymap.set({"n", "v", "o"}, "gx", "<nop>", { desc = "", noremap = true })
+
