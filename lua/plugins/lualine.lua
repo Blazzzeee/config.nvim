@@ -1,128 +1,74 @@
 return {
     "nvim-lualine/lualine.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    lazy=true,
     config = function()
-        -- Custom function to display LSP client names for the current buffer
-        local function lsp_client()
-            local msg = "No Active LSP"
-            local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
+        local clients_lsp = function()
+            local bufnr = vim.api.nvim_get_current_buf()
+
             local clients = vim.lsp.get_clients()
-            if not clients or vim.tbl_isempty(clients) then
-                return msg
+            if next(clients) == nil then
+                return ""
             end
 
-            local client_names = {}
-            for _, client in ipairs(clients) do
-                local filetypes = client.config.filetypes
-                if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
-                    table.insert(client_names, client.name)
-                end
+            local c = {}
+            for _, client in pairs(clients) do
+                table.insert(c, client.name)
             end
-
-            if #client_names > 0 then
-                return table.concat(client_names, ", ")
-            else
-                return msg
-            end
+            return " " .. table.concat(c, "|")
         end
 
-        local M = {}
-        M.theme = function()
-            local colors = {
-                darkgray = "#2c2e3e",
-                gray = "#a0a0b0",
-                innerbg = "none",
-                outerbg = "none",
-                normal = "#7e9cd8",
-                insert = "#98bb6c",
-                visual = "#ffa066",
-                replace = "#e46876",
-                command = "#e6c384",
-            }
-            return {
-                inactive = {
-                    a = { fg = colors.gray, bg = colors.outerbg, gui = "bold" },
-                    b = { fg = colors.gray, bg = colors.outerbg },
-                    c = { fg = colors.gray, bg = colors.innerbg },
-                },
-                visual = {
-                    a = { fg = colors.darkgray, bg = colors.visual, gui = "bold" },
-                    b = { fg = colors.gray, bg = colors.outerbg },
-                    c = { fg = colors.gray, bg = colors.innerbg },
-                },
-                replace = {
-                    a = { fg = colors.darkgray, bg = colors.replace, gui = "bold" },
-                    b = { fg = colors.gray, bg = colors.outerbg },
-                    c = { fg = colors.gray, bg = colors.innerbg },
-                },
-                normal = {
-                    a = { fg = colors.darkgray, bg = colors.normal, gui = "bold" },
-                    b = { fg = colors.gray, bg = colors.outerbg },
-                    c = { fg = colors.gray, bg = colors.innerbg },
-                },
-                insert = {
-                    a = { fg = colors.darkgray, bg = colors.insert, gui = "bold" },
-                    b = { fg = colors.gray, bg = colors.outerbg },
-                    c = { fg = colors.gray, bg = colors.innerbg },
-                },
-                command = {
-                    a = { fg = colors.darkgray, bg = colors.command, gui = "bold" },
-                    b = { fg = colors.gray, bg = colors.outerbg },
-                    c = { fg = colors.gray, bg = colors.innerbg },
-                },
-            }
-        end
-
-        local custom_material = M
         require("lualine").setup({
             options = {
-                theme = custom_material.theme(),
-                component_separators = { left = "", right = "" },
-                section_separators = { left = "", right = "" },
-                disabled_filetypes = {},
-                globalstatus = false,
+                -- theme = "nord",
+                component_separators = "",
+                section_separators = { left = "", right = "" },
+                disabled_filetypes = { "alpha", "Outline", "netrw" },
             },
             sections = {
-                lualine_a = { "mode" },
-                lualine_b = { "branch" },
+                lualine_a = {
+                    { "mode", separator = { left = " ", right = "" }, icon = "" },
+                },
+                lualine_b = {
+                    {
+                        "filetype",
+                        icon_only = true,
+                        padding = { left = 1, right = 0 },
+                    },
+                    "filename",
+                },
                 lualine_c = {
                     {
-                        "diagnostics",
-
-                        -- Table of diagnostic sources, available sources are:
-                        --   'nvim_lsp', 'nvim_diagnostic', 'nvim_workspace_diagnostic', 'coc', 'ale', 'vim_lsp'.
-                        -- or a function that returns a table as such:
-                        --   { error=error_cnt, warn=warn_cnt, info=info_cnt, hint=hint_cnt }
-                        sources = { "nvim_diagnostic" },
-
-                        -- Displays diagnostics for the defined severity types
-                        sections = { "error", "warn", "info", "hint" },
-
-                        diagnostics_color = {
-                            -- Same values as the general color option can be used here.
-                            error = "DiagnosticError", -- Changes diagnostics' error color.
-                            warn = "DiagnosticWarn", -- Changes diagnostics' warn color.
-                            info = "DiagnosticInfo", -- Changes diagnostics' info color.
-                            hint = "DiagnosticHint", -- Changes diagnostics' hint color.
-                        },
-
-                        symbols = {
-                            error = " ",
-                            warn = " ",
-                            info = " ",
-                            hint = " ",
-                        },
-                        colored = true, -- Displays diagnostics status in color if set to true.
-                        update_in_insert = false, -- Update diagnostics in insert mode.
-                        always_visible = false,
+                        "branch",
+                        icon = "",
+                    },
+                    {
+                        "diff",
+                        symbols = { added = " ", modified = " ", removed = " " },
+                        colored = false,
                     },
                 },
-                lualine_x = {},
-                lualine_y = { "filetype", "filename" },
-                lualine_z = { lsp_client },
+                lualine_x = {
+                    {
+                        "diagnostics",
+                        symbols = { error = " ", warn = " ", info = " ", hint = " " },
+                        update_in_insert = true,
+                    },
+                },
+                lualine_y = { clients_lsp },
+                lualine_z = {
+                    { "location", separator = { left = "", right = " " }, icon = "" },
+                },
             },
-            inactive_sections = {},
-            tabline = {},
-            extensions = { "fugitive", "oil", "mason", "lazy" },
+            inactive_sections = {
+                lualine_a = { "filename" },
+                lualine_b = {},
+                lualine_c = {},
+                lualine_x = {},
+                lualine_y = {},
+                lualine_z = { "location" },
+            },
+            extensions = { "toggleterm", "trouble" },
         })
     end,
 }
