@@ -3,7 +3,7 @@ vim.opt.relativenumber = true
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 require("config.lazy")
-vim.cmd(":colorscheme nord")
+vim.cmd(":colorscheme vague")
 require("keymap")
 require("floaterm")
 vim.opt.clipboard = "unnamedplus"
@@ -34,13 +34,21 @@ vim.opt.shortmess:append("c")
 -- Use spaces instead of tabs
 vim.o.expandtab = true
 vim.o.shiftwidth = 4
-vim.o.tabstop = 4 
+vim.o.tabstop = 4
 vim.o.smartindent = true
 vim.opt.termguicolors = true
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
+vim.opt.cursorline = true
+
+--Disable arrow keys
+vim.cmd("map <Up> <Nop>")
+vim.cmd("map <Down> <Nop>")
+vim.cmd("map <Left> <Nop>")
+vim.cmd("map <Right> <Nop>")
+
 function Highlightscmp()
     vim.api.nvim_set_hl(0, "PmenuSel", { bg = "#282C34", fg = "NONE" })
     vim.api.nvim_set_hl(0, "Pmenu", { fg = "#C5CDD9", bg = "#22252A" })
@@ -83,6 +91,18 @@ vim.diagnostic.config({
 })
 
 --White Line numbers
-vim.cmd([[highlight LineNr guifg=#CDD6F4]])
-vim.cmd([[highlight CursorLineNr guifg=#CDD6F4]])
+-- vim.cmd([[highlight LineNr guifg=#CDD6F4]])
+-- vim.cmd([[highlight CursorLineNr guifg=#CDD6F4]])
 
+
+vim.api.nvim_create_autocmd("BufReadPost", {
+    group = vim.api.nvim_create_augroup("LoadLualineRealBufferOnly", { clear = true }),
+    callback = function(args)
+        local ft = vim.bo[args.buf].filetype
+        local bt = vim.bo[args.buf].buftype
+        if bt == "" and ft ~= "netrw" and ft ~= "alpha" and ft ~= "lazy" then
+            require("lazy").load({ plugins = { "lualine.nvim" } })
+            vim.api.nvim_del_augroup_by_name("LoadLualineRealBufferOnly")
+        end
+    end,
+})
