@@ -7,6 +7,19 @@ return {
             "rafamadriz/friendly-snippets",
             "saadparwaiz1/cmp_luasnip",
         },
+        init = function()
+            -- Delay loading in non-filetype buffers like netrw, prompt, etc.
+            vim.api.nvim_create_autocmd("InsertEnter", {
+                group = vim.api.nvim_create_augroup("LazyLoadCmpRealBuffer", { clear = true }),
+                callback = function()
+                    local bt = vim.api.nvim_get_option_value("buftype", { buf = 0 })
+                    local ft = vim.api.nvim_get_option_value("filetype", { buf = 0 })
+                    if bt == "" and ft ~= "netrw" then
+                        require("lazy").load({ plugins = { "nvim-cmp" } })
+                    end
+                end,
+            })
+        end,
         config = function()
             require("luasnip.loaders.from_vscode").lazy_load()
             local ls = require("luasnip")
@@ -31,7 +44,8 @@ return {
 
     {
         "hrsh7th/nvim-cmp",
-        event = { "InsertEnter", "CmdlineEnter" },
+        lazy=true,
+        event = { "BufReadPre", "BufNewFile" },
         dependencies = {
             "hrsh7th/cmp-nvim-lua",
             "hrsh7th/cmp-nvim-lsp",
@@ -50,10 +64,10 @@ return {
                             -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
                             -- can also be a function to dynamically calculate max width such as
                             -- menu = function() return math.floor(0.45 * vim.o.columns) end,
-                            menu = 50, -- leading text (labelDetails)
-                            abbr = 50, -- actual suggestion item
+                            menu = 50,            -- leading text (labelDetails)
+                            abbr = 50,            -- actual suggestion item
                         },
-                        ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+                        ellipsis_char = "...",    -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
                         show_labelDetails = true, -- show labelDetails in menu. Disabled by default
 
                         -- The function below will be called before any actual modifications from lspkind
@@ -104,42 +118,42 @@ return {
                     { name = "nvim_lsp", max_item_count = 2 },
                     { name = "buffer",   keyword_length = 4, max_item_count = 2 },
                 }, {
-                    { name = "path", max_item_count = 3},
+                    { name = "path", max_item_count = 3 },
                 }),
             })
         end,
     },
-    {
-        "hrsh7th/cmp-cmdline",
-        event = { "InsertEnter", "CmdlineEnter" },
-        dependencies = {
-            "hrsh7th/nvim-cmp",
-        },
-        config = function()
-            -- `/` cmdline setup.
-            local cmp = require("cmp")
-            cmp.setup.cmdline("/", {
-                window = {},
-                mapping = cmp.mapping.preset.cmdline(),
-                sources = {
-                    { name = "buffer", max_item_count = 5 },
-                },
-            })
-            -- `:` cmdline setup.
-            cmp.setup.cmdline(":", {
-                mapping = cmp.mapping.preset.cmdline(),
-                sources = cmp.config.sources({
-                    { name = "path", max_item_count = 5 },
-                }, {
-                    {
-                        name = "cmdline",
-                        max_item_count = 5,
-                        option = {
-                            ignore_cmds = { "Man", "!" },
-                        },
-                    },
-                }),
-            })
-        end,
-    },
+    -- {
+    --     "hrsh7th/cmp-cmdline",
+    --     event = { "InsertEnter", "CmdlineEnter" },
+    --     dependencies = {
+    --         "hrsh7th/nvim-cmp",
+    --     },
+    --     config = function()
+    --         -- `/` cmdline setup.
+    --         local cmp = require("cmp")
+    --         cmp.setup.cmdline("/", {
+    --             window = {},
+    --             mapping = cmp.mapping.preset.cmdline(),
+    --             sources = {
+    --                 { name = "buffer", max_item_count = 5 },
+    --             },
+    --         })
+    --         -- `:` cmdline setup.
+    --         cmp.setup.cmdline(":", {
+    --             mapping = cmp.mapping.preset.cmdline(),
+    --             sources = cmp.config.sources({
+    --                 { name = "path", max_item_count = 5 },
+    --             }, {
+    --                 {
+    --                     name = "cmdline",
+    --                     max_item_count = 5,
+    --                     option = {
+    --                         ignore_cmds = { "Man", "!" },
+    --                     },
+    --                 },
+    --             }),
+    --         })
+    --     end,
+    -- },
 }
