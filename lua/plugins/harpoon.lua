@@ -1,10 +1,17 @@
--- lua/plugins/harpoon.lua
 return {
     "ThePrimeagen/harpoon",
+    lazy = true,
     dependencies = { "nvim-lua/plenary.nvim" },
+    keys = {
+        { "<leader>a", function() require("harpoon.mark").add_file() end, desc = "Add file to harpoon" },
+        { "<S-o>",     function() require("harpoon.ui").toggle_quick_menu() end, desc = "Toggle Harpoon menu" },
+        { "<S-h>",     function() require("harpoon.ui").nav_file(1) end, desc = "Harpoon file 1" },
+        { "<S-j>",     function() require("harpoon.ui").nav_file(2) end, desc = "Harpoon file 2" },
+        { "<S-k>",     function() require("harpoon.ui").nav_file(3) end, desc = "Harpoon file 3" },
+        { "<S-l>",     function() require("harpoon.ui").nav_file(4) end, desc = "Harpoon file 4" },
+    },
     config = function()
         require("harpoon").setup({
-            -- Example setup options, adjust as needed
             global_settings = {
                 save_on_toggle = false,
                 save_on_change = true,
@@ -13,13 +20,5 @@ return {
                 excluded_filetypes = { "harpoon" },
             },
         })
-        local map = vim.api.nvim_set_keymap
-        local opts = { noremap = true, silent = true }
-        map("n", "<leader>a", ":lua require('harpoon.mark').add_file()<CR>", {desc = "Add file to harpoon"})
-        map("n", "<S-o>", ":lua require('harpoon.ui').toggle_quick_menu()<CR>", opts)
-        map("n", "<S-h>", ":lua require('harpoon.ui').nav_file(1)<CR>", opts)
-        map("n", "<S-j>", ":lua require('harpoon.ui').nav_file(2)<CR>", opts)
-        map("n", "<S-k>", ":lua require('harpoon.ui').nav_file(3)<CR>", opts)
-        map("n", "<S-l>", ":lua require('harpoon.ui').nav_file(4)<CR>", opts)
     end,
 }
