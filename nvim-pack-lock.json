@@ -1,0 +1,36 @@
+{
+  "plugins": {
+    "blink.cmp": {
+      "rev": "d918ebd",
+      "src": "https://github.com/Saghen/blink.cmp"
+    },
+    "fzf-lua": {
+      "rev": "a13c5c5",
+      "src": "https://github.com/ibhagwan/fzf-lua"
+    },
+    "mini.pick": {
+      "rev": "96ee37d",
+      "src": "https://github.com/echasnovski/mini.pick"
+    },
+    "nvim": {
+      "rev": "e79d09f",
+      "src": "https://github.com/catppuccin/nvim"
+    },
+    "nvim-autopairs": {
+      "rev": "23320e7",
+      "src": "https://www.github.com/windwp/nvim-autopairs"
+    },
+    "nvim-treesitter": {
+      "rev": "42fc28ba",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter"
+    },
+    "oil.nvim": {
+      "rev": "919e155",
+      "src": "https://github.com/stevearc/oil.nvim"
+    },
+    "vague.nvim": {
+      "rev": "27a19ff",
+      "src": "https://github.com/vague2k/vague.nvim"
+    }
+  }
+}
