@@ -3,7 +3,7 @@ vim.opt.relativenumber = true
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 require("config.lazy")
-vim.cmd(":colorscheme vague")
+vim.cmd("colorscheme vague")
 require("keymap")
 require("floaterm")
 vim.opt.clipboard = "unnamedplus"
@@ -33,8 +33,8 @@ vim.opt.shortmess:append("c")
 
 -- Use spaces instead of tabs
 vim.o.expandtab = true
-vim.o.shiftwidth = 4
-vim.o.tabstop = 4
+vim.o.shiftwidth = 2
+vim.o.tabstop = 2
 vim.o.smartindent = true
 vim.opt.termguicolors = true
 vim.opt.swapfile = false
@@ -50,25 +50,37 @@ vim.cmd("map <Left> <Nop>")
 vim.cmd("map <Right> <Nop>")
 
 function Highlightscmp()
-    vim.api.nvim_set_hl(0, "PmenuSel", { bg = "#282C34", fg = "NONE" })
-    vim.api.nvim_set_hl(0, "Pmenu", { fg = "#C5CDD9", bg = "#22252A" })
-    -- gray
-    vim.api.nvim_set_hl(0, "CmpItemAbbrDeprecated", { bg = "NONE", strikethrough = true, fg = "#808080" })
-    -- blue
-    vim.api.nvim_set_hl(0, "CmpItemAbbrMatch", { bg = "NONE", fg = "#569CD6" })
-    vim.api.nvim_set_hl(0, "CmpItemAbbrMatchFuzzy", { link = "CmpIntemAbbrMatch" })
-    -- light blue
-    vim.api.nvim_set_hl(0, "CmpItemKindVariable", { bg = "NONE", fg = "#9CDCFE" })
-    vim.api.nvim_set_hl(0, "CmpItemKindInterface", { link = "CmpItemKindVariable" })
-    vim.api.nvim_set_hl(0, "CmpItemKindText", { link = "CmpItemKindVariable" })
-    -- pink
-    vim.api.nvim_set_hl(0, "CmpItemKindFunction", { bg = "NONE", fg = "#C586C0" })
-    vim.api.nvim_set_hl(0, "CmpItemKindMethod", { link = "CmpItemKindFunction" })
-    -- front
-    vim.api.nvim_set_hl(0, "CmpItemKindKeyword", { bg = "NONE", fg = "#D4D4D4" })
-    vim.api.nvim_set_hl(0, "CmpItemKindProperty", { link = "CmpItemKindKeyword" })
-    vim.api.nvim_set_hl(0, "CmpItemKindUnit", { link = "CmpItemKindKeyword" })
+    local set = vim.api.nvim_set_hl
+
+    -- Popup window + selection
+    set(0, "PmenuSel", { link = "Visual" })        -- selection uses colorscheme Visual
+    set(0, "Pmenu",    { link = "NormalFloat" })   -- menu bg/fg matches float windows
+
+    -- Abbreviation (deprecated / match highlighting)
+    set(0, "CmpItemAbbrDeprecated", { link = "Comment" })
+    set(0, "CmpItemAbbrMatch",      { link = "Search" })
+    set(0, "CmpItemAbbrMatchFuzzy", { link = "IncSearch" })
+
+    -- Kinds → link to colorscheme groups
+    local kinds = {
+        Variable   = "Identifier",
+        Interface  = "Type",
+        Text       = "String",
+
+        Function   = "Function",
+        Method     = "Function",
+
+        Keyword    = "Keyword",
+        Property   = "Identifier",
+        Unit       = "Number",
+    }
+
+    for kind, group in pairs(kinds) do
+        set(0, "CmpItemKind" .. kind, { link = group })
+    end
 end
+
+Highlightscmp()
 
 --Breakpoints color
 vim.fn.sign_define("DapBreakpoint", { text = "B", texthl = "DapBreakpoint", linehl = "", numhl = "" })
@@ -95,14 +107,14 @@ vim.diagnostic.config({
 -- vim.cmd([[highlight CursorLineNr guifg=#CDD6F4]])
 
 
-vim.api.nvim_create_autocmd("BufReadPost", {
-    group = vim.api.nvim_create_augroup("LoadLualineRealBufferOnly", { clear = true }),
-    callback = function(args)
-        local ft = vim.bo[args.buf].filetype
-        local bt = vim.bo[args.buf].buftype
-        if bt == "" and ft ~= "netrw" and ft ~= "alpha" and ft ~= "lazy" then
-            require("lazy").load({ plugins = { "lualine.nvim" } })
-            vim.api.nvim_del_augroup_by_name("LoadLualineRealBufferOnly")
-        end
-    end,
-})
+-- vim.api.nvim_create_autocmd("BufReadPost", {
+--     group = vim.api.nvim_create_augroup("LoadLualineRealBufferOnly", { clear = true }),
+--     callback = function(args)
+--         local ft = vim.bo[args.buf].filetype
+--         local bt = vim.bo[args.buf].buftype
+--         if bt == "" and ft ~= "netrw" and ft ~= "alpha" and ft ~= "lazy" then
+--             require("lazy").load({ plugins = { "lualine.nvim" } })
+--             vim.api.nvim_del_augroup_by_name("LoadLualineRealBufferOnly")
+--         end
+--     end,
+-- })
