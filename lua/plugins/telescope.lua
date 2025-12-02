@@ -13,10 +13,10 @@ return {
           sorting_strategy = "ascending",
           layout_config = {
             horizontal = {
-              preview_width = 0.6,
+              preview_width = 0.4,
               prompt_position = "top",
               results_position = "top",
-              results_width = 0.4,
+              results_width = 0.6,
             },
             width = 0.8,
           },
